@@ -1,0 +1,124 @@
+<html>
+	<head>
+		<title>Gitlab simulator</title>
+		<style>
+			h3 {
+				font-family: 'Courier New', Courier, monospace;
+
+			}
+			#video-container {
+				position: relative;
+			}
+
+			#video {
+				position: absolute;
+				margin: .6vw 0 0 1.2vw;
+				top: 0;
+				left: 0;
+				z-index: 1;
+			}
+
+			#canvas {
+				position: absolute;
+				margin: .6vw 0 0 1.2vw;
+				top: 0;
+				left: 0;
+				z-index: 2;
+				cursor: pointer;
+			}
+			#error {
+				position: absolute;
+				margin: .6vw 0 0 1.2vw;
+				top: 0;
+				left: 0;
+				z-index: 3;
+				color: rgb(203, 0, 0);
+			}
+		</style>
+	</head>
+	<body>
+		<h3>Gitlab simulator 2024</h3>
+		<div id="video-container">
+			<iframe width="1800" height="1012" src="https://www.youtube.com/embed/rOqgRiNMVqg?si=3SfTtbfCU52oR3TO&amp;start=7?autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+			<canvas onclick="setName()" id="canvas" width="586" height="328"></canvas>
+			<video id="video" width="586" height="328"></video>
+			<p id="error"></p>
+		</div>
+
+		<script>
+			let userName = 'John Smith';
+			function setName() {
+				userName = prompt('Enter your name'); 
+			}
+
+			// when the window is resized, resize the canvas
+			window.addEventListener('resize', resizeCanvas);
+			// resize the canvas when the page loads
+			resizeCanvas();
+
+			function resizeCanvas() {
+				// set everything to the width of the viewport
+				const canvas = document.getElementById('canvas');
+				const video = document.getElementById('video');
+				const clientWidth = document.documentElement.clientWidth;
+				const aspectRatio = 1800 / 1012;
+				const youtube = document.querySelector('iframe');
+				youtube.width = clientWidth;
+				youtube.height = clientWidth / aspectRatio;
+				canvas.width = clientWidth / 3 * .98;
+				canvas.height = clientWidth / aspectRatio / 3 * 0.98;
+				video.width = clientWidth / 3 * .98;
+				video.height = clientWidth / aspectRatio / 3 * 0.98;
+			}
+
+			// Get the users webcam stream and play it in the canvas
+			try {
+				const video = document.getElementById('video');
+				const canvas = document.getElementById('canvas');
+				const ctx = canvas.getContext('2d');
+				navigator.mediaDevices.getUserMedia({ video: true, facingMode: "user" })
+					.then((stream) => {
+						video.srcObject = stream;
+						video.play();
+						let delay = 1000 / 30;
+						setInterval(() => {
+							// copy the video feed to the canvas and crop it so it fits the size of the canvas without distoring the aspect ratio
+							ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+							// blur the image a little
+							ctx.filter = 'blur(1px)';
+							ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+							ctx.fillRect(0, canvas.height - canvas.height / 8, canvas.width / 2, canvas.height / 8);
+							
+							// in the bottom left corner of the canvas, draw the name 'Gitlab Employee #3438' in white
+							ctx.fillStyle = 'white';
+							// set fontsize by the width of the canvas
+							ctx.font = `${canvas.height / 14}px Arial`;
+							ctx.fillText(`${userName}`, canvas.width / 100, canvas.height * .96);
+
+						}, 1000 / 30);
+					})
+					.catch((err) => {
+						console.log('Error accessing the camera', err);
+						document.getElementById('error').innerText = 'Error accessing the camera';
+					});
+			} catch (err) {
+				document.getElementById('error').innerText = `${err}`;
+			}
+
+			const ctx = canvas.getContext('2d');
+			// fill the entire canvas with yellow
+			ctx.fillStyle = 'black';
+			ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+			// In the center of the canvas draw "Camera off" in white
+			ctx.fillStyle = 'white';
+			// bold font
+			ctx.font = '24px Arial';
+			ctx.fillText('Camera off', canvas.width / 2 - 70, canvas.height / 2);
+
+
+		</script>
+
+
+	</body>
+</html>
