@@ -1,10 +1,38 @@
 <html>
 	<head>
-		<title>Gitlab simulator</title>
+		<title>Gitlab Meeting Simulator 2024</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap" rel="stylesheet">
+
 		<style>
+			body {
+				font-family: 'monospace';
+				margin: 0;
+				padding: 0;
+				background-color: #f0f0f0;
+			}
+			a {
+				color: black;
+			}
 			h3 {
 				font-family: 'Courier New', Courier, monospace;
 
+			}
+			header {
+				padding: 1em;
+			}
+			nav {
+				display: flex;
+				padding: .5em;
+			}
+			nav a, nav button {
+				margin: 0 .5em;
+				padding: .5em;
+				border: 1px solid black;
+				border-radius: 5px;
+				background-color: white;
+				cursor: pointer;
 			}
 			#video-container {
 				position: relative;
@@ -34,21 +62,66 @@
 				z-index: 3;
 				color: rgb(203, 0, 0);
 			}
+
+			.stealth #testimonials, .stealth nav, .stealth header {
+				display: none;
+			}
+
+			#testimonials {
+				margin: 0 1.2vw;
+			}
+
+			#testimonials blockquote {
+				font-family: 'Times New Roman', Times, serif;
+				/* italic */
+				font-style: italic;
+				font-size: 1.2em;
+				margin: 1.2vw 0;
+			}
+
+			blockquote::after {
+				content: '”';
+			}
+
+			blockquote::before {
+				content: '“';
+			}
 		</style>
 	</head>
 	<body>
-		<h3>Gitlab simulator 2024</h3>
+		<header>
+			<h3>Gitlab Meeting Simulator 2024</h3>
+			<p>Pretend to work from Gitlab with Gitlab Meeting Simulator 2024.</p>
+		</header>
+		<nav>
+			<a href="https://twitter.com/pronounced_kyle/status/1757215139550605713?t=kcF4t6pRd0UtPYvkx4loDg" target="_blank">What?</a>
+			<button onclick="setName()">Set Name</button>
+			<button onclick="stealth()">Stealth</button>
+		</nav>
 		<div id="video-container">
 			<iframe width="1800" height="1012" src="https://www.youtube.com/embed/rOqgRiNMVqg?si=3SfTtbfCU52oR3TO&amp;start=7?autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+			<!-- <iframe width="560" height="315" src="https://www.youtube.com/embed/lBVtvOpU80Q?si=0wwGwxJ21aeiREmw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe> -->
 			<canvas onclick="setName()" id="canvas" width="586" height="328"></canvas>
 			<video id="video" width="586" height="328"></video>
 			<p id="error"></p>
+		</div>
+
+		<div id="testimonials">
+			<h2>Testimonials from YouTube</h2>
+			<blockquote>I play this when I need my family to leave me alone - so helpful</blockquote>
+			<blockquote>Im not ready to tell my parents that i resigned my job, so i was telling them im working from home and play this every morning so they would stop bothering me. This is a lifesaver!</blockquote>
+			<blockquote>I've watched this 30 times and I have no idea what Gitlab is.</blockquote>
 		</div>
 
 		<script>
 			let userName = 'John Smith';
 			function setName() {
 				userName = prompt('Enter your name'); 
+			}
+
+			function stealth() {
+				// add 'stealth' class to the body
+				document.body.classList.add('stealth');
 			}
 
 			// when the window is resized, resize the canvas
